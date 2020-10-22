@@ -2,9 +2,13 @@ package com.nishant.daggerhilt.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.nishant.daggerhilt.R
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -18,20 +22,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         println(someClass.doAThing())
-        println(someClass.doSomething())
+
     }
 }
 
-class SomeClass @Inject constructor(
-        private val someOtherClass: SomeOtherClass
-) {
+@AndroidEntryPoint
+class MyFragment: Fragment() {
+
+    @Inject
+    lateinit var someClass: SomeClass
+}
+
+@ActivityScoped
+class SomeClass @Inject constructor() {
     fun doAThing(): String {
         return "Look, I did a thing!"
     }
-
-    fun doSomething() = someOtherClass.doSomeOtherThing()
-}
-
-class SomeOtherClass @Inject constructor() {
-    fun doSomeOtherThing() = "Another thing!"
 }
